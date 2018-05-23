@@ -24,7 +24,7 @@ def in_journey?
   @journey
 end
 
-def touch_in
+def touch_in(entry_station)
   fail "balance is below £#{MINIMUM_BALANCE}" if @balance < MINIMUM_BALANCE
   @journey = true
 end

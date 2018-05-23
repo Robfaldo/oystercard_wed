@@ -48,26 +48,34 @@ describe Oystercard do
     context 'touch in' do
       it 'can touch in' do
         subject.top_up(Oystercard::MINIMUM_BALANCE + 1)
-        subject.touch_in
+        subject.touch_in("station")
         expect(subject).to be_in_journey
       end
 
       it 'raises an error if balance is less than minimum' do
-        expect{ subject.touch_in }.to raise_error "balance is below £#{Oystercard::MINIMUM_BALANCE}"
+        expect{ subject.touch_in("station") }.to raise_error "balance is below £#{Oystercard::MINIMUM_BALANCE}"
       end
+
+      it 'logs the name of the station that the customer touches in at' do
+        subject.top_up(10)
+        expect { subject.touch_in("entry_station") }.not_to raise_error
+      end
+
+
+
     end
 
   context 'touch out' do
     it 'can touch out' do
       subject.top_up(10)
-      subject.touch_in
+      subject.touch_in("station")
       subject.touch_out
       expect(subject).not_to be_in_journey
     end
 
     it 'reduces the card balance by minimum fare' do
       subject.top_up(10)
-      subject.touch_in
+      subject.touch_in("station")
       subject.touch_out
       expect { subject.touch_out }.to change { subject.balance }.by min_fare
     end
