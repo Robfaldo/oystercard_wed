@@ -6,10 +6,14 @@ describe Oystercard do
   let(:max_balance) { Oystercard::MAXIMUM_BALANCE }
   let(:min_balance) { Oystercard::MINIMUM_BALANCE }
   let(:entry_station) { double :entry_station }
+  let(:exit_station) { double :exit_station }
 
   context '#default' do
     it 'starts with a balance of zero' do
       expect(oystercard.balance).to be == 0
+    end
+    it 'has an empty list of journeys' do
+      expect(oystercard.trips).to be_empty
     end
   end
 
@@ -70,27 +74,35 @@ end
       end
     end
 
-    describe 'touch out' do
+    context 'when touch out' do
       before do 
         oystercard.top_up(10)
       end
-      it 'can touch out' do
-        oystercard.touch_in(entry_station)
-        oystercard.touch_out
-        expect(oystercard).not_to be_in_journey
-      end
+      context '#touch_out' do
+        it 'can touch out' do
+          oystercard.touch_in(entry_station)
+          oystercard.touch_out(exit_station)
+          expect(oystercard).not_to be_in_journey
+        end
 
-      it 'reduces the card balance by minimum fare' do
-        oystercard.touch_in(entry_station)
-        oystercard.touch_out
-        expect { oystercard.touch_out }.to change { oystercard.balance }.by min_fare
-      end
+        it 'reduces the card balance by minimum fare' do
+          oystercard.touch_in(entry_station)
+          oystercard.touch_out(exit_station)
+          expect { oystercard.touch_out(exit_station) }.to change { oystercard.balance }.by min_fare
+        end
 
-      it 'sets the last station to nil when it touches out' do
-        oystercard.touch_in(entry_station)
-        oystercard.touch_out
-        expect(oystercard.entry_station).to eq nil
-      end 
+        it 'sets the last station to nil when it touches out' do
+          oystercard.touch_in(entry_station)
+          oystercard.touch_out(exit_station)
+          expect(oystercard.entry_station).to eq nil
+        end 
+      end
+        it 'stores previous trips' do
+          oystercard.touch_in(entry_station)
+          oystercard.touch_out(exit_station)
+          expect(oystercard.previous_trips[entry_station]).to eq exit_station
+        end
+
     end
   end
 end
