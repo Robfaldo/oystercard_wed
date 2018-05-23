@@ -33,6 +33,7 @@ end
 def touch_out
   @journey = false
   @balance += MINIMUM_FARE
+  @entry_station = nil
 end
 
 def last_station

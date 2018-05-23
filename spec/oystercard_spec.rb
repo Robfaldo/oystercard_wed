@@ -71,19 +71,26 @@ end
     end
 
     describe 'touch out' do
-      it 'can touch out' do
+      before do 
         oystercard.top_up(10)
+      end
+      it 'can touch out' do
         oystercard.touch_in(entry_station)
         oystercard.touch_out
         expect(oystercard).not_to be_in_journey
       end
 
       it 'reduces the card balance by minimum fare' do
-        oystercard.top_up(10)
         oystercard.touch_in(entry_station)
         oystercard.touch_out
         expect { oystercard.touch_out }.to change { oystercard.balance }.by min_fare
       end
+
+      it 'sets the last station to nil when it touches out' do
+        oystercard.touch_in(entry_station)
+        oystercard.touch_out
+        expect(oystercard.entry_station).to eq nil
+      end 
     end
   end
 end
