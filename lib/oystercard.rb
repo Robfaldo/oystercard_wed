@@ -35,7 +35,7 @@ def touch_out
   @balance += MINIMUM_FARE
 end
 
-def last_touched_in_destination
+def last_station
   @entry_station
 end
 
