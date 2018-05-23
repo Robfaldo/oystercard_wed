@@ -61,7 +61,11 @@ describe Oystercard do
         expect { subject.touch_in("entry_station") }.not_to raise_error
       end
 
-
+      it 'logs the station that the card touches in at' do
+        subject.top_up(10)
+        subject.touch_in("station")
+        expect(subject.last_touched_in_destination).to eq "station"
+      end
 
     end
 

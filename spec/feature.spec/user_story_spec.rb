@@ -20,7 +20,7 @@ describe 'User Story' do
     oystercard = Oystercard.new
     oystercard.top_up(10)
     oystercard.touch_in("entry_station") 
-    expect(oystercard.last_touched_in_destination).to eq entry_station
+    expect(oystercard.last_touched_in_destination).to eq "entry_station"
   end
 
 end
