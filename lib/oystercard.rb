@@ -21,7 +21,7 @@ def deduct(amount)
 end
 
 def in_journey?
-  @journey
+  !!entry_station
 end
 
 def touch_in(entry_station)
